@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import br.com.cursomc.enums.TipoCliente;
 
 @Entity
@@ -30,6 +32,7 @@ public class Cliente {
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 
@@ -39,6 +42,9 @@ public class Cliente {
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipoCliente = tipoCliente.getCod();
+	}
+	
+	public Cliente() {
 	}
 
 	public List<Endereco> getEnderecos() {
