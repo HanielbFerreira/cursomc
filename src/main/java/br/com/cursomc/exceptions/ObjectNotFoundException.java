@@ -4,17 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class DominioNotFoundException extends RuntimeException {
+public class ObjectNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public DominioNotFoundException(String msg) {
+	public ObjectNotFoundException(String msg) {
 		super(msg);
 	}
 	
 	
-	public static DominioNotFoundException build() {
-		return new DominioNotFoundException("Dominio não encontrado.");
+	public static ObjectNotFoundException build() {
+		return new ObjectNotFoundException("Dominio não encontrado.");
 	}
 	
 	
