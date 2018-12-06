@@ -2,8 +2,11 @@ package br.com.cursomc.domains;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+
 import br.com.cursomc.enums.EstadoPagamento;
 
+@Entity
 public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 
@@ -13,7 +16,8 @@ public class PagamentoComBoleto extends Pagamento {
 	public PagamentoComBoleto() {
 	}
 
-	public PagamentoComBoleto(Integer id, EstadoPagamento estadoPagamento, Pedido pedido, Date dataVencimento, Date dataPagamento) {
+	public PagamentoComBoleto(Integer id, EstadoPagamento estadoPagamento, Date dataVencimento,
+			Date dataPagamento, Pedido pedido) {
 		super(id, estadoPagamento, pedido);
 		this.dataVencimento = dataVencimento;
 		this.dataPagamento = dataPagamento;
