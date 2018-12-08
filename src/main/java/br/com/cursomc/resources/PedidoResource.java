@@ -1,4 +1,3 @@
-
 package br.com.cursomc.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +8,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.cursomc.domains.Cliente;
-import br.com.cursomc.services.ClienteService;
+import br.com.cursomc.domains.Pedido;
+import br.com.cursomc.services.PedidoService;
 
 @RestController
-@RequestMapping(value = "/cliente")
-public class ClienteResource {
+@RequestMapping(value = "/pedido")
+public class PedidoResource {
 
 	@Autowired
-	private ClienteService clienteService;
+	private PedidoService pedidoService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> find(@PathVariable Integer id) {
-		return new ResponseEntity<Cliente>(clienteService.buscar(id), HttpStatus.OK);
+	public ResponseEntity<?> buscar(@PathVariable Integer id) {
+		return new ResponseEntity<Pedido>(pedidoService.find(id), HttpStatus.OK);
 	}
 
 }
