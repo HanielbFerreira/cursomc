@@ -2,6 +2,8 @@
 package br.com.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.cursomc.domains.Categoria;
+import br.com.cursomc.dto.CategoriaDTO;
 import br.com.cursomc.services.CategoriaService;
 
 @RestController
@@ -29,6 +32,13 @@ public class CategoriaResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		return new ResponseEntity<Categoria>(categoriaService.find(id), HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> categorias = categoriaService.findAll();
+		List<CategoriaDTO> categoriasDto = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return new ResponseEntity<List<CategoriaDTO>>(categoriasDto, HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -47,7 +57,6 @@ public class CategoriaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		categoriaService.delete(id);
 		return ResponseEntity.noContent().build();
-
 	}
 
 }
