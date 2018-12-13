@@ -56,9 +56,9 @@ public class CategoriaResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Categoria> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
+	public ResponseEntity<CategoriaDTO> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = categoriaService.fromDTO(objDto);
-		return new ResponseEntity<Categoria>(categoriaService.update(obj, id), HttpStatus.ACCEPTED);
+		return new ResponseEntity<CategoriaDTO>(new CategoriaDTO(categoriaService.update(obj, id)), HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/{id}")
