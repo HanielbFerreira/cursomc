@@ -11,11 +11,9 @@ public class ObjectNotFoundException extends RuntimeException {
 	public ObjectNotFoundException(String msg) {
 		super(msg);
 	}
-	
-	
+
 	public static ObjectNotFoundException build() {
 		return new ObjectNotFoundException("Dominio não encontrado.");
 	}
-	
-	
+
 }

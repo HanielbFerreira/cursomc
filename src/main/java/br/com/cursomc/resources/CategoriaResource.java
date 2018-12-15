@@ -58,7 +58,8 @@ public class CategoriaResource {
 	@PutMapping("/{id}")
 	public ResponseEntity<CategoriaDTO> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = categoriaService.fromDTO(objDto);
-		return new ResponseEntity<CategoriaDTO>(new CategoriaDTO(categoriaService.update(obj, id)), HttpStatus.ACCEPTED);
+		return new ResponseEntity<CategoriaDTO>(new CategoriaDTO(categoriaService.update(obj, id)),
+				HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/{id}")
@@ -68,13 +69,12 @@ public class CategoriaResource {
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<Page<CategoriaDTO>> findPage(
-			@RequestParam(value="page", defaultValue="0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue="nome") String orderBy,
-			@RequestParam(value="direction", defaultValue="ASC") String direction) {
+	public ResponseEntity<Page<CategoriaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		Page<Categoria> lista = categoriaService.findPage(page, linesPerPage, orderBy, direction);
-		Page<CategoriaDTO> listaDto = lista.map(obj -> new CategoriaDTO(obj)); 
+		Page<CategoriaDTO> listaDto = lista.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listaDto);
 	}
 

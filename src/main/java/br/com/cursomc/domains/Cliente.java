@@ -28,7 +28,7 @@ public class Cliente implements Serializable {
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
-	private int tipoCliente;
+	private Integer tipoCliente;
 
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
@@ -46,7 +46,13 @@ public class Cliente implements Serializable {
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipoCliente = tipoCliente.getCod();
+		
+		if (tipoCliente == null) {
+			this.tipoCliente = null;
+		} else {
+			this.tipoCliente = tipoCliente.getCod();
+		}
+		
 	}
 
 	public Cliente() {
