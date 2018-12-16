@@ -25,7 +25,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.cursomc.domains.Cliente;
 import br.com.cursomc.dto.ClienteDTO;
 import br.com.cursomc.dto.ClienteNewDTO;
-import br.com.cursomc.repositories.EnderecoRepository;
 import br.com.cursomc.services.ClienteService;
 
 @RestController
