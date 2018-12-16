@@ -21,7 +21,7 @@ public abstract class Pagamento implements Serializable {
 
 	@Id
 	private Integer id;
-	private int estadoPagamento;
+	private Integer estadoPagamento;
 
 	@OneToOne
 	@JoinColumn(name = "Pedido_id")
@@ -31,7 +31,7 @@ public abstract class Pagamento implements Serializable {
 
 	public Pagamento(Integer id, EstadoPagamento estadoPagamento, Pedido pedido) {
 		this.id = id;
-		this.estadoPagamento = estadoPagamento.getCod();
+		this.estadoPagamento = (estadoPagamento == null) ? null : estadoPagamento.getCod();
 		this.pedido = pedido;
 	}
 

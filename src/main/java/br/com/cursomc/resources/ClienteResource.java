@@ -24,6 +24,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.cursomc.domains.Cliente;
 import br.com.cursomc.dto.ClienteDTO;
+import br.com.cursomc.dto.ClienteNewDTO;
+import br.com.cursomc.repositories.EnderecoRepository;
 import br.com.cursomc.services.ClienteService;
 
 @RestController
@@ -48,7 +50,7 @@ public class ClienteResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDto) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
 		Cliente obj = clienteService.fromDTO(objDto);
 		obj = clienteService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -69,13 +71,12 @@ public class ClienteResource {
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<Page<ClienteDTO>> findPage(
-			@RequestParam(value="page", defaultValue="0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue="nome") String orderBy,
-			@RequestParam(value="direction", defaultValue="ASC") String direction) {
+	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		Page<Cliente> lista = clienteService.findPage(page, linesPerPage, orderBy, direction);
-		Page<ClienteDTO> listaDto = lista.map(obj -> new ClienteDTO(obj)); 
+		Page<ClienteDTO> listaDto = lista.map(obj -> new ClienteDTO(obj));
 		return ResponseEntity.ok().body(listaDto);
 	}
 
