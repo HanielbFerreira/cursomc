@@ -60,7 +60,8 @@ public class Produto implements Serializable {
 		return lista;
 	}
 
-	public Produto(String nome, Double preco) {
+	public Produto(Integer id,String nome, Double preco) {
+		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 	}
