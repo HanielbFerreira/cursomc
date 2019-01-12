@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.cursomc.domains.Cliente;
 import br.com.cursomc.domains.ItemPedido;
 import br.com.cursomc.domains.PagamentoComBoleto;
-import br.com.cursomc.domains.PagamentoComCartao;
 import br.com.cursomc.domains.Pedido;
+import br.com.cursomc.domains.Produto;
 import br.com.cursomc.enums.EstadoPagamento;
 import br.com.cursomc.exceptions.ObjectNotFoundException;
 import br.com.cursomc.repositories.ItemPedidoRepository;
@@ -34,6 +35,9 @@ public class PedidoService {
 	@Autowired
 	private ProdutoService produtoSerive;
 	
+	@Autowired
+	private ClienteService clienteService;
+	
 	public Pedido find(Integer id) {
 		return pedidoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! id:" + id + ", Tipo: " + Pedido.class.getName()));
@@ -41,7 +45,9 @@ public class PedidoService {
 
 	@Transactional
 	public Pedido insert(Pedido obj) {
+		Cliente c = clienteService.find(obj.getCliente().getId());
 		obj.setId(null);
+		obj.setCliente(c);
 		obj.setInstante(new Date());
 		obj.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
@@ -56,9 +62,13 @@ public class PedidoService {
 		
 		for (ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoSerive.find(ip.getProduto().getId()).getPreco());
+			Produto produto = produtoSerive.find(ip.getProduto().getId());
+			ip.setPreco(produto.getPreco());
+			ip.getProduto().setNome(produto.getNome());
 			ip.setPedido(obj);
 		}
+		
+		System.out.println(obj);
 		
 		itemPedidoRepository.saveAll(obj.getItens());
 		
