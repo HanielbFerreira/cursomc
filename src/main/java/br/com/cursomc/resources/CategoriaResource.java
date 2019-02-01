@@ -27,7 +27,7 @@ import br.com.cursomc.dto.CategoriaDTO;
 import br.com.cursomc.services.CategoriaService;
 
 @RestController
-@RequestMapping(value = "/categoria")
+@RequestMapping(value = "/categorias")
 public class CategoriaResource {
 
 	@Autowired

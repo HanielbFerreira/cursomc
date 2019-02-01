@@ -19,7 +19,7 @@ import br.com.cursomc.domains.Pedido;
 import br.com.cursomc.services.PedidoService;
 
 @RestController
-@RequestMapping(value = "/pedido")
+@RequestMapping(value = "/pedidos")
 public class PedidoResource {
 
 	@Autowired
