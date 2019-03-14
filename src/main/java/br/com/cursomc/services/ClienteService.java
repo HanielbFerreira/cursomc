@@ -17,14 +17,17 @@ import br.com.cursomc.domains.Cliente;
 import br.com.cursomc.domains.Endereco;
 import br.com.cursomc.dto.ClienteDTO;
 import br.com.cursomc.dto.ClienteNewDTO;
+import br.com.cursomc.enums.Perfil;
 import br.com.cursomc.enums.TipoCliente;
+import br.com.cursomc.exceptions.AuthorizationException;
 import br.com.cursomc.exceptions.ObjectNotFoundException;
 import br.com.cursomc.repositories.ClienteRepository;
 import br.com.cursomc.repositories.EnderecoRepository;
+import br.com.cursomc.security.UserSS;
 
 @Service
 public class ClienteService {
-	
+
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
@@ -35,6 +38,11 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Não autorizado");
+		}
+
 		return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! id:" + id + ", Tipo: " + Cliente.class.getName()));
 	}
@@ -61,7 +69,6 @@ public class ClienteService {
 
 	public void delete(Integer id) {
 		clienteRepository.deleteById(id);
-
 	}
 
 	public Cliente update(Cliente obj, Integer id) {
@@ -76,7 +83,6 @@ public class ClienteService {
 	}
 
 	public Cliente fromDTO(@Valid ClienteNewDTO objDto) {
-
 		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
 				TipoCliente.toEnum(objDto.getTipoCliente()), pe.encode(objDto.getSenha()));
 		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
@@ -90,7 +96,6 @@ public class ClienteService {
 		if (objDto.getTelefone3() != null) {
 			cli.getTelefones().add(objDto.getTelefone3());
 		}
-
 		return cli;
 	}
 

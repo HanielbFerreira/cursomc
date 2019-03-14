@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +46,6 @@ public class ClienteResource {
 		List<ClienteDTO> categoriasDto = categorias.stream().map(obj -> new ClienteDTO(obj))
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<ClienteDTO>>(categoriasDto, HttpStatus.OK);
-
 	}
 
 	@PostMapping
@@ -56,6 +56,7 @@ public class ClienteResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
 		objDto.setId(id);
@@ -63,12 +64,14 @@ public class ClienteResource {
 		return new ResponseEntity<ClienteDTO>(new ClienteDTO(clienteService.update(obj, id)), HttpStatus.ACCEPTED);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		clienteService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/page")
 	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,

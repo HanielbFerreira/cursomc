@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +31,17 @@ public class PedidoResource {
 	public ResponseEntity<Pedido> buscar(@PathVariable Integer id) {
 		return new ResponseEntity<Pedido>(pedidoService.find(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj) {
 		obj = pedidoService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+
+	@GetMapping
+	public ResponseEntity<Page<Pedido>> findPage(@RequestBody Pageable page) {
+		return new ResponseEntity<>(pedidoService.findPage(page), HttpStatus.OK);
 	}
 
 }
