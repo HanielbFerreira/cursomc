@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"/categorias/**", 
 	};
 	private static final String[] PUBLIC_MATCHES_POST = {
-			"/clientes/**"
+			"/clientes/**",
+			"/auth/forgot/**"
 	};
 
 	@Override
@@ -59,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers(PUBLIC_MATCHES).permitAll()
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET).permitAll()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHES_POST).permitAll()
+			.antMatchers(HttpMethod.POST, PUBLIC_MATCHES_POST).permitAll()
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAutheticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetaisService));

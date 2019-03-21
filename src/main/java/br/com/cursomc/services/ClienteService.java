@@ -99,4 +99,12 @@ public class ClienteService {
 		return cli;
 	}
 
+	public Cliente findByEmail(String email) {
+		return clienteRepository.findByEmail(email);
+	}
+
+	public void save(Cliente c) {
+		clienteRepository.save(c);
+	}
+	
 }

@@ -18,7 +18,7 @@ public class SmtpEmailService extends AbstractEmailService {
 
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	@Override
 	public void sendEmail(SimpleMailMessage msg) {
 		LOG.info("Enviando email.");
