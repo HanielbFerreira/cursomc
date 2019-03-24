@@ -2,6 +2,7 @@ package br.com.cursomc.services;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ import br.com.cursomc.exceptions.ObjectNotFoundException;
 import br.com.cursomc.repositories.ClienteRepository;
 import br.com.cursomc.repositories.EnderecoRepository;
 import br.com.cursomc.security.UserSS;
+import javassist.NotFoundException;
 
 @Service
 public class ClienteService {
@@ -113,7 +115,19 @@ public class ClienteService {
 	}
 	
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
+		UserSS user = UserService.authenticated();
+		
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado.");
+		}
+		
+		URI uri =  s3Service.uploadFile(multipartFile);
+		
+		Cliente c = clienteRepository.findById(user.getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado."));
+		c.setImageUrl(uri.toString());
+		clienteRepository.save(c);
+		
+		return uri;
 	}
 	
 }
