@@ -6,6 +6,9 @@ import br.com.cursomc.security.UserSS;
 
 public class UserService {
 
+	private UserService() {
+	}
+
 	public static UserSS authenticated() {
 		try {
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -13,5 +16,4 @@ public class UserService {
 			return null;
 		}
 	}
-	
 }

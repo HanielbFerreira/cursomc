@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,11 @@ public class ClienteResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		return new ResponseEntity<Cliente>(clienteService.find(id), HttpStatus.OK);
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity<Cliente> findByEmail(@PathParam(value = "email") String email) {
+		return new ResponseEntity<Cliente>(clienteService.findByEmail(email), HttpStatus.OK);
 	}
 
 	@GetMapping
@@ -85,7 +91,6 @@ public class ClienteResource {
 
 	@PostMapping("/picture")
 	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
-		System.out.println(file.getName());
 		URI uri = clienteService.uploadProfilePicture(file);
 		return ResponseEntity.created(uri).build();
 	}

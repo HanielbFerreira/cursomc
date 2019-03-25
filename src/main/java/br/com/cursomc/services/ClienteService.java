@@ -59,8 +59,7 @@ public class ClienteService {
 			throw new AuthorizationException("Não autorizado");
 		}
 
-		return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! id:" + id + ", Tipo: " + Cliente.class.getName()));
+		return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Id não encontrado."));
 	}
 
 	public Cliente fromDTO(ClienteDTO objDto) {
@@ -69,6 +68,15 @@ public class ClienteService {
 
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
+	}
+
+	public Cliente findByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Não autorizado");
+		}
+
+		return clienteRepository.findByEmail(email);
 	}
 
 	@Transactional
@@ -115,10 +123,6 @@ public class ClienteService {
 		return cli;
 	}
 
-	public Cliente findByEmail(String email) {
-		return clienteRepository.findByEmail(email);
-	}
-
 	public void save(Cliente c) {
 		clienteRepository.save(c);
 	}
@@ -137,7 +141,6 @@ public class ClienteService {
 		String fileName = prefix + user.getId() + ".jpg";
 
 		return s3Service.uploadFile(imageService.getInputStrem(jpgImage, "jpg"), fileName, "image");
-
 	}
 
 }
