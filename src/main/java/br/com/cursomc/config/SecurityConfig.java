@@ -37,19 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JWTUtil jwtUtil;
 
-	private static final String[] PUBLIC_MATCHES = { 
-			"/h2-console/**" 
-	};
+	private static final String[] PUBLIC_MATCHES = { "/h2-console/**" };
 
-	private static final String[] PUBLIC_MATCHES_GET = { 
-				"/produtos/**",
-				"/categorias/**",
-				"/estados/**"
-	};
-	private static final String[] PUBLIC_MATCHES_POST = {
-			"/clientes/**",
-			"/auth/forgot/**"
-	};
+	private static final String[] PUBLIC_MATCHES_GET = { "/produtos/**", "/categorias/**", "/estados/**" };
+	private static final String[] PUBLIC_MATCHES_POST = { "/clientes/**", "/auth/forgot/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -58,11 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 
 		http.cors().and().csrf().disable();
-		http.authorizeRequests()
-			.antMatchers(PUBLIC_MATCHES).permitAll()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET).permitAll()
-			.antMatchers(HttpMethod.POST, PUBLIC_MATCHES_POST).permitAll()
-			.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(PUBLIC_MATCHES).permitAll().antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET)
+				.permitAll().antMatchers(HttpMethod.POST, PUBLIC_MATCHES_POST).permitAll().anyRequest().authenticated();
 		http.addFilter(new JWTAutheticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetaisService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -75,8 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+		config.setAllowedMethods(Arrays.asList("POST", "PUT", "DELETE", "GET", "OPTIONS"));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
 
