@@ -22,8 +22,8 @@ public class CategoriaService {
 	private CategoriaRepository categoriaRepository;
 
 	public Categoria find(Integer id) {
-		return categoriaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! id:" + id + ", Tipo: " + Categoria.class.getName()));
+		return categoriaRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrado! id: " + id));
 	}
 
 	public Categoria insert(Categoria obj) {
@@ -52,12 +52,12 @@ public class CategoriaService {
 	public List<Categoria> findAll() {
 		return categoriaRepository.findAll();
 	}
-	
+
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return categoriaRepository.findAll(pageRequest);
 	}
-	
+
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(), objDto.getNome());
 	}
